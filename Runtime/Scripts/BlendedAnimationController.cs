@@ -3,9 +3,9 @@ using UnityEngine.Playables;
 using UnityEngine.Animations;
 using System.Collections.Generic;
 
-namespace NoZ.Animz
+namespace NoZ.Animations
 {
-    public class AnimzBlendedController : MonoBehaviour
+    public class BlendedAnimationController : MonoBehaviour
     {
         private const int MaxBlendPoolSize = 64;
         private const float DefaultBlendTime = 0.1f;
@@ -14,7 +14,7 @@ namespace NoZ.Animz
 
         public delegate void AnimationCompleteDelegate();
         public delegate void AnimationFrameDelegate (float normalizedTime);
-        public delegate void AnimationEventDelegate(AnimzEvent evt);
+        public delegate void AnimationEventDelegate(AnimationEvent evt);
        
         private abstract class Blend
         {
@@ -29,7 +29,7 @@ namespace NoZ.Animz
             public AnimationFrameDelegate onFrame;
             public AnimationEventDelegate onEvent;
 
-            public abstract AnimzClip.AnimzEventFrame[] events { get; }
+            public abstract AnimationShader.EventFrame[] events { get; }
 
             public abstract bool isLooping { get; }
             public abstract bool isDone { get; }
@@ -46,9 +46,9 @@ namespace NoZ.Animz
 
         private class ClipBlend : Blend
         {
-            public AnimzClip clip;            
+            public AnimationShader clip;            
             public AnimationClipPlayable playable;
-            public override AnimzClip.AnimzEventFrame[] events => clip.events;
+            public override AnimationShader.EventFrame[] events => clip.events;
             public override bool isLooping => clip.isLooping;
             public override bool isDone => playable.IsDone();
             public override bool isPlaying => playable.GetPlayState() == PlayState.Playing;
@@ -76,9 +76,9 @@ namespace NoZ.Animz
 
         private class BlendTreeBlend : Blend
         {
-            public AnimzBlendTree blendTree;
+            public AnimationBlendTree blendTree;
             public AnimationMixerPlayable mixer;
-            public override AnimzClip.AnimzEventFrame[] events => blendTree.events;
+            public override AnimationShader.EventFrame[] events => blendTree.events;
             public override bool isLooping => blendTree.isLooping;
             public override bool isDone => mixer.IsDone();
             public override bool isPlaying => mixer.GetPlayState() == PlayState.Playing;
@@ -106,7 +106,7 @@ namespace NoZ.Animz
 
         private class Blender : PlayableBehaviour
         {
-            public AnimzBlendedController _controller = null;
+            public BlendedAnimationController _controller = null;
 
             public override void PrepareFrame(Playable playable, FrameData info)
             {
@@ -214,7 +214,7 @@ namespace NoZ.Animz
             }
         }
 
-        public void Play(AnimzBlendTree blendTree, float speed = 1.0f,
+        public void Play(AnimationBlendTree blendTree, float speed = 1.0f,
             AnimationCompleteDelegate onComplete = null,
             AnimationFrameDelegate onFrame = null,
             AnimationEventDelegate onEvent = null)
@@ -225,8 +225,17 @@ namespace NoZ.Animz
             // TODO: all clips in the blend tree must play together 
         }
 
+        public void Play (AnimationClip clip,
+            float speed = 1.0f,
+            AnimationCompleteDelegate onComplete = null,
+            AnimationFrameDelegate onFrame = null,
+            AnimationEventDelegate onEvent = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Play(
-            AnimzClip clip,
+            AnimationShader clip,
             float speed = 1.0f,
             AnimationCompleteDelegate onComplete = null,
             AnimationFrameDelegate onFrame = null,
@@ -259,7 +268,7 @@ namespace NoZ.Animz
                 _playableGraph.Play();
         }
 
-        private Blend GetBlend(AnimzClip clip)
+        private Blend GetBlend(AnimationShader clip)
         {
             if (!_playableGraph.IsValid())
                 InitializeGraph();
@@ -293,7 +302,7 @@ namespace NoZ.Animz
             return blend;
         }
 
-        private Blend GetBlend(AnimzBlendTree blendTree)
+        private Blend GetBlend(AnimationBlendTree blendTree)
         {
             return null;
         }
@@ -303,7 +312,7 @@ namespace NoZ.Animz
         /// </summary>
         /// <param name="clip">Animation clip</param>
         /// <param name="speed">Speed multiplier</param>
-        public void SetSpeed(AnimzClip clip, float speed) => GetBlend(clip)?.SetSpeed(speed);
+        public void SetSpeed(AnimationShader clip, float speed) => GetBlend(clip)?.SetSpeed(speed);
 
         private void UpdateBlends(float deltaTime)
         {
@@ -424,7 +433,7 @@ namespace NoZ.Animz
         /// <summary>
         /// Create a new blend using the given animation clip
         /// </summary>
-        private Blend CreateBlend (AnimzClip clip)
+        private Blend CreateBlend (AnimationShader clip)
         {
             ClipBlend blend;
             if (_clipBlendPool.Count > 0)

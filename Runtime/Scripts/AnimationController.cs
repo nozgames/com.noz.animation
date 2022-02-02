@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-namespace NoZ.Animz
+namespace NoZ.Animations
 {
-    public class AnimzClipController : MonoBehaviour, IAnimationClipSource
+    public class AnimationController : MonoBehaviour, IAnimationClipSource
     {
         [Tooltip("Optional Animator Target")]
         [SerializeField] private Animator _animator = null;

@@ -1,25 +1,25 @@
 using System;
 using UnityEngine;
 
-namespace NoZ.Animz
+namespace NoZ.Animations
 {
-    [CreateAssetMenu(menuName = "NoZ/Animz/Clip")]
-    public class AnimzClip : ScriptableObject
+    [CreateAssetMenu(menuName = "NoZ/Animation/Shader")]
+    public class AnimationShader : ScriptableObject
     {
         [Serializable]
-        internal struct AnimzEventFrame
+        internal struct EventFrame
         {
             [Tooltip("Normalized time to raise the event [0-1]")]
             public float time;
 
             [Tooltip("Event to raise")]
-            public AnimzEvent raise;
+            public AnimationEvent raise;
         }
 
         [SerializeField] private AnimationClip _clip = null;
         [SerializeField] private float _speed = 1.0f;
         [SerializeField] private float _blendTime = 0.1f;
-        [SerializeField] private AnimzEventFrame[] _events = null;
+        [SerializeField] private EventFrame[] _events = null;
 
         public AnimationClip clip => _clip;
         public float speed => _speed;
@@ -27,6 +27,6 @@ namespace NoZ.Animz
         public bool isLooping => clip.isLooping;
         public float length => clip.length;
 
-        internal AnimzEventFrame[] events => _events;
+        internal EventFrame[] events => _events;
     }
 }

@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace NoZ.Animz
+namespace NoZ.Animations
 {
-    [CreateAssetMenu(menuName = "NoZ/Animz/Event")]
-    public class AnimzEvent : ScriptableObject
+    [CreateAssetMenu(menuName = "NoZ/Animation/Event")]
+    public class AnimationEvent : ScriptableObject
     {
         private int _hash = 0;
 

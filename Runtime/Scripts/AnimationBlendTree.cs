@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace NoZ.Animz
+namespace NoZ.Animations
 {
-    [CreateAssetMenu(menuName = "NoZ/Animz/BlendTree")]
-    public class AnimzBlendTree : ScriptableObject
+    [CreateAssetMenu(menuName = "NoZ/Animation/BlendTree")]
+    public class AnimationBlendTree : ScriptableObject
     {
         [Serializable]
         private struct Blend
@@ -18,9 +18,9 @@ namespace NoZ.Animz
         [SerializeField] private float _speed = 1.0f;
         [SerializeField] private float _blendTime = 0.1f;
 
-        [SerializeField] private AnimzClip.AnimzEventFrame[] _events = null;
+        [SerializeField] private AnimationShader.EventFrame[] _events = null;
 
-        internal AnimzClip.AnimzEventFrame[] events => _events;
+        internal AnimationShader.EventFrame[] events => _events;
 
         private void OnEnable()
         {
