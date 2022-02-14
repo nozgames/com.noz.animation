@@ -192,6 +192,9 @@ namespace NoZ.Animations
 
         public void StopAll (float blendTime = DefaultBlendTime)
         {
+            if (null == _blends)
+                return;
+
             if(blendTime <= 0.0f)
             {
                 _blends.Clear();
@@ -239,19 +242,20 @@ namespace NoZ.Animations
             float speed = 1.0f,
             AnimationCompleteDelegate onComplete = null,
             AnimationFrameDelegate onFrame = null,
-            AnimationEventDelegate onEvent = null
+            AnimationEventDelegate onEvent = null,
+            bool blendIn = true
             )
         {
             if (clip == null)
                 return;
 
+            StopAll(blendIn ? clip.blendTime : 0.0f);
+
             var blend = GetBlend(clip);
             if(null == blend)
                 return;
-                
-            StopAll(clip.blendTime);
 
-            blend.duration = clip.blendTime;
+            blend.duration = blendIn ? clip.blendTime : 0.00001f;
             blend.elapsed = 0.0f;
             blend.weight = MinBlendWeight;
             blend.weightStart = MinBlendWeight;
